@@ -1,0 +1,10 @@
+## 代理模式
+
+### 优点：
+只有真正去调用的时候才会创建实例。有些情况下，程序不会真正的调用被调用对象的某个方法时，这种情况无需去创建被调用这对象的实例。在这种情况下，代理模式可以调程序的性能。宏观上减少了系统开销。
+
+### 应用
+hibernate延时加载
+
+### 动态代理模式类图
+![Image text](https://github.com/camda/Demo/blob/master/src/main/resources/images/001.png)

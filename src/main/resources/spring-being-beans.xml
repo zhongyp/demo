@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+     xmlns="http://www.springframework.org/schema/beans"  
+     xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">   
+	<bean id="dog" class="com.zhongyp.spring.demo.factory.BeingFactory" factory-method="getBeing">
+		<constructor-arg value="dog" />
+		<property value="我是狗" name="msg" />
+		
+	</bean>
+	<bean id="cat" class="com.zhongyp.spring.demo.factory.BeingFactory" factory-method="getBeing">
+		<constructor-arg value="cat" />
+		<property value="我是猫" name="msg" />
+		
+	</bean>
+	
+	
+	
+</beans>

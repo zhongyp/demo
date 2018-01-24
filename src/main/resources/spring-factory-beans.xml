@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+     xmlns="http://www.springframework.org/schema/beans"  
+     xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"> 
+     
+    <bean id="person" class="com.zhongyp.spring.demo.getfield.Person">
+    	<!-- <constructor-arg index="0" value="father"></constructor-arg> -->
+    	<property name="age" value="23"></property>
+    	<property name="son">
+    		<bean class="com.zhongyp.spring.demo.getfield.Son">
+    			<!-- <constructor-arg index="0" value="son"></constructor-arg> -->
+    			<property name="age" value="1"></property>
+    		</bean>
+    	</property>
+    </bean>   
+    <!-- PropertyPathFactoryBean 用来注入其他bean的属性 -->
+	<bean id="factory" class="org.springframework.beans.factory.config.PropertyPathFactoryBean">
+		<property name="targetBeanName" value="person"></property>
+		<property name="propertyPath" value="son"></property>
+	</bean>
+	
+	
+	<!--网上案例 -->
+	<!-- <?xml version="1.0" encoding="GB2312"?>  
+<beans default-autowire="byName"  
+    xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:util="http://www.springframework.org/schema/util"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  
+        http://www.springframework.org/schema/util http://localhost:8080/schema/www.springframework.org/schema/util/spring-util-2.0.xsd ">  
+  
+ <bean id="person" class="com.alibaba.chj.factorybean.Person" scope="prototype">  
+     <property name="age">  
+        <value>30</value>  
+     </property>  
+     <property name="son">  
+        <bean class="com.alibaba.chj.factorybean.Son">  
+           <property name="age">  
+              <value>16</value>  
+           </property>  
+        </bean>  
+     </property>  
+  </bean>  
+    
+  如下将会将person的属性son的属性age传入son1实例的age属性  
+    <bean id="son1" class="com.alibaba.chj.factorybean.Son">  
+        <property name="age">  
+          以下是访问bean属性的简单方式,这样可以将person这个bean的age属性赋值给son1这个bean的age属性             
+         <bean id="person.son.age" class="org.springframework.beans.factory.config.PropertyPathFactoryBean"/>  
+        </property>  
+    </bean>  
+      
+    以下将会获得结果son,它将是person bean的son的数值  
+    <bean id="son2" class="org.springframework.beans.factory.config.PropertyPathFactoryBean">  
+       <property name="targetBeanName">  
+         <value>person</value>  
+       </property>  
+       <property name="propertyPath">  
+         <value>son</value>  
+       </property>  
+    </bean>  
+      
+     以下将会获得结果16,它将是person bean的son的age属性  
+    <bean id="son3" class="org.springframework.beans.factory.config.PropertyPathFactoryBean">  
+       <property name="targetBeanName">  
+         <value>person</value>  
+       </property>  
+       <property name="propertyPath">  
+         <value>son.age</value>  
+       </property>  
+    </bean>  
+      
+    以下会获得结果为30 ,它将是获得该bean的内部bean的age属性  
+    <bean id="son4" class="org.springframework.beans.factory.config.PropertyPathFactoryBean">  
+        <property name="targetObject">  
+            <bean class="com.alibaba.chj.factorybean.Person">  
+                <property name="age"><value>30</value></property>  
+            </bean>  
+        </property>  
+        <property name="propertyPath"><value>age</value></property>  
+    </bean>  
+</beans>   -->
+</beans>	
