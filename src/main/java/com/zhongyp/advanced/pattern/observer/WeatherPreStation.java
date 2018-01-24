@@ -6,30 +6,30 @@ import java.util.Iterator;
 /**
  * Created by Administrator on 2017/7/24.
  */
-public class WeatherObserver implements Subject {
+public class WeatherPreStation implements Station {
     private ArrayList list;
-    private Observer obs;
-    private String str;
-    public WeatherObserver(){
+    private User obs;
+    private String weather = "好天气";
+    public WeatherPreStation(){
         list = new ArrayList();
     }
 
     @Override
-    public void register(Observer obs) {
+    public void register(User obs) {
         list.add(obs);
     }
 
     @Override
-    public void notifyA() {
+    public void notifyAllUser() {
         Iterator it = list.iterator();
         while(it.hasNext()){
-            Observer obs = (Observer) it.next();
+            User obs = (User) it.next();
             obs.update(getStr());
         }
     }
 
     @Override
-    public void remove(Observer obs) {
+    public void remove(User obs) {
         int i = list.indexOf(obs);
         if(i>0){
             list.remove(obs);
@@ -37,6 +37,8 @@ public class WeatherObserver implements Subject {
     }
 
     public String getStr(){
-        return "ABC";
+        return weather;
     };
+
+
 }

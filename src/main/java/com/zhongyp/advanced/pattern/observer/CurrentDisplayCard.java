@@ -3,11 +3,11 @@ package com.zhongyp.advanced.pattern.observer;
 /**
  * Created by Administrator on 2017/7/24.
  */
-public class CurrentDisplayCard implements Observer,DisplayElement {
+public class CurrentDisplayCard implements User,DisplayElement {
     private String str;
-    private WeatherObserver wo;
+    private Station wo;
 
-    public CurrentDisplayCard(WeatherObserver wo){
+    public CurrentDisplayCard(Station wo){
         this.wo = wo;
         wo.register(this);
     }
