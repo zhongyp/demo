@@ -6,9 +6,10 @@ package com.zhongyp.advanced.pattern.strategy;
  * date: 2018/1/24
  * mail: zhongyp001@163.com
  */
-public class SmallStrategy implements Strategy {
+public class FlyWithWings implements FlyBehavior {
+
     @Override
-    public void makeStrategy() {
-        System.out.println("制定个小策略");
+    public void fly() {
+        System.out.println("fly in the sky");
     }
 }

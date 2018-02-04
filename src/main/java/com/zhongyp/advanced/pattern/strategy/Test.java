@@ -8,9 +8,9 @@ package com.zhongyp.advanced.pattern.strategy;
  */
 public class Test {
     public static void main(String[] args){
-        Strategy bigStrategy = new BigStrategy();
-        Meeting meeting = new Meeting(bigStrategy);
-        meeting.fire();
+        FlyBehavior behavior = new FlyWithWings();
+        Duck duck = new Duck(behavior);
+        duck.fly();
     }
 
 }

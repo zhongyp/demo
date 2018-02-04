@@ -1,17 +1,21 @@
 package com.zhongyp.advanced.pattern.command;
 
 /**
- * Created by Administrator on 2017/8/13.
+ * project: demo
+ * author: zhongyp
+ * date: 2018/2/4
+ * mail: zhongyp001@163.com
  */
 public class LightOnCommand implements Command {
 
-    Light light;
-    public LightOnCommand(Light light){
-        this.light = light;
+    RemoteReceiver remoteReceiver = null;
+    public LightOnCommand(RemoteReceiver remoteReceiver){
+        this.remoteReceiver = remoteReceiver;
     }
+
     @Override
     public void execute() {
-        light.on();
+        remoteReceiver.lightOn();
     }
 
     @Override

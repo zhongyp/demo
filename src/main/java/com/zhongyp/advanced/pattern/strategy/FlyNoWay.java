@@ -6,8 +6,9 @@ package com.zhongyp.advanced.pattern.strategy;
  * date: 2018/1/24
  * mail: zhongyp001@163.com
  */
-public interface Strategy {
-
-    void makeStrategy();
-
+public class FlyNoWay implements FlyBehavior {
+    @Override
+    public void fly() {
+        System.out.println("I can not fly");
+    }
 }

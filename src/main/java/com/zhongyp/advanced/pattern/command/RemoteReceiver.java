@@ -1,16 +1,24 @@
 package com.zhongyp.advanced.pattern.command;
 
 /**
- * Created by Administrator on 2017/8/13.
+ * project: demo
+ * author: zhongyp
+ * date: 2018/2/4
+ * mail: zhongyp001@163.com
  */
 public class RemoteReceiver {
 
-    Command command;
-    public void setCommand(Command command){
-        this.command = command;
+    public Light getLight() {
+        return light;
     }
 
-    public void pressLightButton(){
-        command.execute();
+    public void setLight(Light light) {
+        this.light = light;
+    }
+
+    Light light = null;
+
+    public void lightOn(){
+        light.on();
     }
 }

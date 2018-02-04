@@ -1,7 +1,10 @@
 package com.zhongyp.advanced.pattern.command;
 
 /**
- * Created by Administrator on 2017/8/13.
+ * project: demo
+ * author: zhongyp
+ * date: 2018/2/4
+ * mail: zhongyp001@163.com
  */
 public interface Command {
     void execute();
