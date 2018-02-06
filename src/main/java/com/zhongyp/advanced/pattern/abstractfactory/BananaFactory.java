@@ -1,4 +1,4 @@
-package com.zhongyp.advanced.abstractfactory;
+package com.zhongyp.advanced.pattern.abstractfactory;
 
 /**
  * project: demo
@@ -6,9 +6,9 @@ package com.zhongyp.advanced.abstractfactory;
  * date: 2018/2/1
  * mail: zhongyp001@163.com
  */
-public class AppleFactory implements FruitFactory {
+public class BananaFactory implements FruitFactory {
     @Override
     public Banana createBanana() {
-        return new SmallBanana();
+        return new BigBanana();
     }
 }

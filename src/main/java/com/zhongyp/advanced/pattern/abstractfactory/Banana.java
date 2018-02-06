@@ -1,4 +1,4 @@
-package com.zhongyp.advanced.abstractfactory;
+package com.zhongyp.advanced.pattern.abstractfactory;
 
 /**
  * project: demo
