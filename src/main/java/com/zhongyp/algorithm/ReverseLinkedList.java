@@ -17,8 +17,8 @@ public class ReverseLinkedList {
 //        reverseLinkedList.printNode(node1);
 //        Node node2 = reverseLinkedList.reverseRecursive(node);
 //        reverseLinkedList.printNode(node2);
-        reverseLinkedList.reverseRecursive(node, null);
-        reverseLinkedList.printNode(reverseLinkedList.node4);
+//        reverseLinkedList.reverseRecursive(node, null);
+//        reverseLinkedList.printNode(reverseLinkedList.node4);
     }
     public Node reverse(Node node){
         Node init = null;
@@ -33,21 +33,7 @@ public class ReverseLinkedList {
         return init;
     }
 
-    public Node reverseRecursive(Node node1){
 
-        if(node1 == null){
-            return null;
-        }
-        if(node1.next != null){
-            Node node2 = node1.next;
-            
-        }else {
-            return node1;
-        }
-        Node node3 = node1;
-        node3.next = node2;
-        reverseRecursive(node1.next, node3);
-    }
 
     public Node create(int[] num, int index){
         if(index>=num.length){

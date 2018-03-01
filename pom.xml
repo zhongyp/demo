@@ -23,6 +23,10 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
+
+
+
 		</dependencies>
 	
 	</dependencyManagement>
@@ -81,6 +85,43 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
+
+
+		<!-- 数据库连接池 -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>0.2.9</version>
+		</dependency>
+		<!-- mysqljdbc驱动 ,这个是数据库连接池需要的-->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.0.5</version>
+		</dependency>
+
+		<!-- 事务：DataSourceTransactionManager -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>4.3.12.RELEASE</version>
+		</dependency>
+
+
+		<!-- 事务aop:config -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>4.3.12.RELEASE</version>
+		</dependency>
+
+		<!-- c3p0 -->
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.5.2</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>demo</finalName>

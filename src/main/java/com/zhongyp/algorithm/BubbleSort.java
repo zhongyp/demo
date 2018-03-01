@@ -33,7 +33,42 @@ public class BubbleSort {
         }
     }
 
+    public static void quickSort(int[] num,int start, int end){
+            int sys = num[start];
+            int left = start;
+            int right = end;
+
+            while(start<end){
+                if(num[end]<sys){
+                    num[start] = num[end];
+                    start++;
+                }else{
+                    end--;
+                    continue;
+                }
+                if(sys<num[start]){
+                    num[end] = num[start];
+                    end--;
+                }else{
+                    start++;
+                    continue;
+                }
+            }
+            num[start] = sys;
+            if(left<start-1){
+                quickSort(num,left,start-1);
+            }
+            if(right>end+1){
+                quickSort(num,end+1,right);
+            }
+
+    }
     public static void main(String[] args){
-        bubbleSort();
+//        bubbleSort();
+        int[] arr = {3,5,7,1,4};
+        quickSort(arr,0,arr.length-1);
+        for(int a:arr){
+            System.out.print(a + " ");
+        }
     }
 }
