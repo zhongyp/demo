@@ -13,6 +13,8 @@ public class ReverseLinkedList {
         ReverseLinkedList reverseLinkedList = new ReverseLinkedList();
         Node node = reverseLinkedList.create(num, 0);
         reverseLinkedList.printNode(node);
+        Node node1 = reverseLinkedList.reverse1(node);
+        reverseLinkedList.printNode(node1);
 //        Node node1 = reverseLinkedList.reverse(node);
 //        reverseLinkedList.printNode(node1);
 //        Node node2 = reverseLinkedList.reverseRecursive(node);
@@ -33,7 +35,40 @@ public class ReverseLinkedList {
         return init;
     }
 
+    /**
+     * 递归方式
+     * @param node1
+     * @return
+     */
+    public Node reverse1(Node node1){
 
+        Node init = node1.next;
+        if(init != null){
+            Node node2= reverse1(init);
+            Node tmp = getLastNode(node2);
+            node1.next = null;
+            tmp.next = node1;
+            return node2;
+        }else{
+            return node1;
+        }
+
+
+
+    }
+
+    public Node getLastNode(Node node){
+        Node node1 = null;
+        if(node == null){
+            return null;
+        }
+        if(node.next == null){
+            node1 = node;
+        }else{
+            node1 = getLastNode(node.next);
+        }
+        return node1;
+    }
 
     public Node create(int[] num, int index){
         if(index>=num.length){

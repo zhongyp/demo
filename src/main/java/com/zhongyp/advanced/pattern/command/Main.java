@@ -11,12 +11,9 @@ import com.sun.org.apache.regexp.internal.RE;
 public class Main {
     public static void main(String[] args){
         Light light = new Light();
-        Control control = new Control();
+        Command command = new LightOnCommand(light);
         RemoteReceiver receiver = new RemoteReceiver();
-        Command command = new LightOnCommand(receiver);
-        receiver.setLight(light);
-        control.setCommand(command);
-        control.lightOnAction();
+        receiver.exeCommand(command);
 
     }
 }

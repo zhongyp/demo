@@ -3,7 +3,7 @@ package com.zhongyp.spring.demo.format;
 public class Main {
 	public static void main(String args[]) {
 		
-//		Main dt = new Main("I");
+//		Test dt = new Test("I");
 //		dt.greet("she");
 		Animal animal = new Dog();
 		animal.eat();

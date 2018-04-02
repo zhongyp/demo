@@ -15,10 +15,12 @@ public class InsertSort {
      * 最坏的情况，要比较的无序序列原本就是逆序有序的，那么要比较的次数是(n+2)(n-1)/2，移动的次数(n+4)(n-1)/2，时间复杂度O(n²)。
      * 直接插入排序的平均复杂度为O(n²)。
      * 直接插入排序是稳定的。
+     *
+     *
      * @param num
      */
     public void directInsert(int[] num){
-        for(int i=1; i<num.length; i++){
+        for(int i=1; i<num.length; i++){// 直接插入排序，把当前序列的0到i-1当做有序序列，每次插入第i个数，然后重新排序0到i。
             for(int j=0;j<i;j++){
                 if(num[i]<num[j]){
                     int a = num[j];
@@ -35,9 +37,10 @@ public class InsertSort {
     /**
      * 希尔排序在最坏的情况下的运行时间是O(n²)，平均时间复杂度为O(n^1.3)。希尔排序对于多达几千个数据项的，中等大小规模的数组排序表现良好。希尔排序不像快速排序和其它时间复杂度为O(nlog2n)的排序算法那么快，因此对非常大的文件排序，它不是最优选择。但是，希尔排序比选择排序和插入排序这种时间复杂度为O(n²)的排序算法还是要快得多，并且它非常容易实现。它在最坏情况下的执行效率和在平均情况下的执行效率相比没有差很多。
      此外希尔排序是不稳定的。
+     * 希尔排序是把记录按下标的一定增量分组，对每组使用直接插入排序算法排序；随着增量逐渐减少，每组包含的关键词越来越多，当增量减至1时，整个文件恰被分成一组，算法便终止。
      * @param num
      */
-    public void hillSort(int[] num){
+    public void hillSort(int[] num){// 选择一个增量（length/2）,
         int gap = 5;
         while(gap>0){
             for(int i=0; i<num.length-gap; i++){

@@ -11,7 +11,7 @@ public class BeanWrapperDemo {
     public static void main(String args[]) throws Exception{
         Object obj = Class.forName("com.zhongyp.advanced.Refect.User").newInstance();
         BeanWrapper bean = new BeanWrapperImpl(obj);
-        bean.setPropertyValue("name","camda");
+        bean.setPropertyValue("name","zhongyp");
     }
 
 

@@ -7,4 +7,3 @@
 hibernate延时加载
 
 ### 动态代理模式类图
-![Image text](https://github.com/camda/Demo/blob/master/src/main/resources/images/001.png)

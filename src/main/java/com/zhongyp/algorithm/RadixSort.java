@@ -8,8 +8,16 @@ package com.zhongyp.algorithm;
  */
 public class RadixSort {
 
-
-
+    /**
+     *
+     * 基数排序
+     * @param A
+     * @param n
+     * @return
+     *
+     * 基数排序思想：求出最大的数是几位的，建10个桶，一个计数器，从个位开始排序，按照数值存入桶中，然后按照顺序取出，置空计数器。接着从十位开始排序，操作和个位一样，直到最大位数。
+     *
+     */
     public int[] radixSort(int[] A, int n) {
         int length = n;
         int divisor = 1;// 定义每一轮的除数，1,10,100...
@@ -24,7 +32,7 @@ public class RadixSort {
             int k = 0;// 被排序数组的下标
             for (int b = 0; b < 10; b++) {// 从0到9号桶按照顺序取出
                 if (count[b] == 0)// 如果这个桶中没有元素放入，那么跳过
-                continue;
+                {continue;}
                 for (int w = 0; w < count[b]; w++) {
                     A[k++] = bucket[b][w];
                 }

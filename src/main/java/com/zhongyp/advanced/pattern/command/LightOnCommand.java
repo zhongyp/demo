@@ -8,14 +8,14 @@ package com.zhongyp.advanced.pattern.command;
  */
 public class LightOnCommand implements Command {
 
-    RemoteReceiver remoteReceiver = null;
-    public LightOnCommand(RemoteReceiver remoteReceiver){
-        this.remoteReceiver = remoteReceiver;
+    Light light = null;
+    public LightOnCommand(Light light){
+        this.light = light;
     }
 
     @Override
     public void execute() {
-        remoteReceiver.lightOn();
+        this.light.on();
     }
 
     @Override
