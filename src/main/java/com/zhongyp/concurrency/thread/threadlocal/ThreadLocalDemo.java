@@ -1,6 +1,4 @@
-package com.zhongyp.thread.threadlocal;
-
-import java.util.Map;
+package com.zhongyp.concurrency.thread.threadlocal;
 
 /**
  * project: demo

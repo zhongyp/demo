@@ -1,4 +1,4 @@
-package com.zhongyp.advanced.Refect;
+package com.zhongyp.advanced.refect;
 
 import java.lang.reflect.*;
 
@@ -10,7 +10,7 @@ public class ReflectDemo {
 
     public static void main(String arsg[]) throws Exception{
         //加载Class对象
-        Class<?> clazz =  Class.forName("com.zhongyp.advanced.Refect.User");
+        Class<?> clazz =  Class.forName("com.zhongyp.advanced.refect.User");
         Method mtd = clazz.getMethod("setName", String.class);
         //实例化Class对象
         Object obj = (Object)clazz.newInstance();

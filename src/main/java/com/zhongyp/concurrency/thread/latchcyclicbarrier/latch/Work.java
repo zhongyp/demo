@@ -1,4 +1,4 @@
-package com.zhongyp.thread.latchcyclicbarrier.latch;
+package com.zhongyp.concurrency.thread.latchcyclicbarrier.latch;
 
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;

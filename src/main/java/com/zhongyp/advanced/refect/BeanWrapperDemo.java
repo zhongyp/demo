@@ -1,4 +1,4 @@
-package com.zhongyp.advanced.Refect;
+package com.zhongyp.advanced.refect;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -9,7 +9,7 @@ import org.springframework.beans.BeanWrapperImpl;
 public class BeanWrapperDemo {
 
     public static void main(String args[]) throws Exception{
-        Object obj = Class.forName("com.zhongyp.advanced.Refect.User").newInstance();
+        Object obj = Class.forName("com.zhongyp.advanced.refect.User").newInstance();
         BeanWrapper bean = new BeanWrapperImpl(obj);
         bean.setPropertyValue("name","zhongyp");
     }

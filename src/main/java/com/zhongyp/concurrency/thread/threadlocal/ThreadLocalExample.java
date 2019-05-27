@@ -1,4 +1,4 @@
-package com.zhongyp.thread.threadlocal;
+package com.zhongyp.concurrency.thread.threadlocal;
 
 /**
  * project: Example

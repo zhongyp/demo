@@ -1,4 +1,4 @@
-package com.zhongyp.thread.latchcyclicbarrier.cyclicbarrier;
+package com.zhongyp.concurrency.thread.latchcyclicbarrier.cyclicbarrier;
 
 import java.util.concurrent.CyclicBarrier;
 

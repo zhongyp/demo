@@ -1,4 +1,4 @@
-package com.zhongyp.thread.latchcyclicbarrier.callable;
+package com.zhongyp.concurrency.thread.latchcyclicbarrier.callable;
 
 import java.util.Random;
 import java.util.concurrent.Callable;

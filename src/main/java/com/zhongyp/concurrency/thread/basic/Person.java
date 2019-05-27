@@ -1,4 +1,4 @@
-package com.zhongyp.thread;
+package com.zhongyp.concurrency.thread.basic;
 
 /**
  * project: demo
@@ -6,7 +6,7 @@ package com.zhongyp.thread;
  * date: 2018/3/16
  * mail: zhongyp001@163.com
  */
-public class Buy {
+public class Person {
 
     static int dd = 5;
     public synchronized void buy(int i){
@@ -29,8 +29,8 @@ public class Buy {
     }
 
     public void sail(int i){
-        String a = "aa";
-        synchronized (Buy.class){
+        String a = "AA";
+        synchronized (Person.class){
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
