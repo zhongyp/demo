@@ -1,4 +1,4 @@
-package com.zhongyp;
+package com.zhongyp.basics.generic;
 
 public class MyNode extends NNode<Integer> {
     public MyNode(Integer data) { super(data); }

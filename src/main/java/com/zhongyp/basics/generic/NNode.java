@@ -1,4 +1,4 @@
-package com.zhongyp;
+package com.zhongyp.basics.generic;
 public class NNode<T> {
 
     public T data;

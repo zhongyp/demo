@@ -1,4 +1,4 @@
-package com.zhongyp;
+package com.zhongyp.basics.generic;
 
 import java.util.Arrays;
 import java.util.List;
