@@ -1,0 +1,10 @@
+## Spring-data-redis 代码示例
+
+### 注解方式
+RedisConf为Redis配置类
+
+### 配置文件方式
+
+配置文件spring-data-redis.xml
+
+测试类：com.zhongyp.redis.TestRedis
