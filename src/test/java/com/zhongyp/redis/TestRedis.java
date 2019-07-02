@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.StringRedisConnection;
-import org.springframework.data.redis.core.*;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.data.redis.support.collections.DefaultRedisList;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +29,6 @@ public class TestRedis {
     @Autowired
     @Qualifier("testRedisTemplate")
     RedisTemplate redisTemplate;
-
 
     @Autowired
     RedisUtils redisUtils;
@@ -78,7 +75,7 @@ public class TestRedis {
                 redisConnection.multi();
                 redisConnection.listCommands().lPush("123a".getBytes(), "abc".getBytes());
                 redisConnection.listCommands().lPush("1234b".getBytes(), "abc3".getBytes());
-                int b = 1/0;
+//                int b = 1/0;
                 redisConnection.listCommands().lPush("1235c".getBytes(), "abc4".getBytes());
                 redisConnection.listCommands().lPush("1236d".getBytes(), "abc5".getBytes());
                 redisConnection.exec();
@@ -94,4 +91,16 @@ public class TestRedis {
     public void testRedisTransaction(){
         redisUtils.testExecuteTransactionWithRedisCallback();
     }
+
+
+    @Test
+    public void testSessionCallback(){
+        redisTemplate.execute(new SessionCallback() {
+            @Override
+            public Object execute(RedisOperations redisOperations) throws DataAccessException {
+                return null;
+            }
+        });
+    }
+
 }
