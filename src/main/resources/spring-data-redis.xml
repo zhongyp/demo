@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <context:property-placeholder location="classpath:redis.properties"/>
+    <context:property-placeholder location="classpath:redis.properties"  ignore-unresolvable="true"/>
     <!-- redis 相关配置 -->
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <!-- 最大空闲数 -->
@@ -29,4 +30,59 @@
         <property name="connectionFactory" ref="jedisConnectionFactory"/>
         <property name="hashValueSerializer" ref="genericJackson2JsonRedisSerializer"></property>
     </bean>
+
+
+    <!-- 以下配置Spring事务管理 -->
+    <bean id="redisUtil" class="com.zhongyp.redis.RedisUtils">
+        <property name="redisTemplate" ref="testRedisTemplate"/>
+    </bean>
+
+    <!-- 注册JDBC属性文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties"  ignore-unresolvable="true"/>
+    <!-- 注册数据源：C3P0数据源 -->
+    <bean id="myDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driverClass}" />
+        <property name="jdbcUrl" value="${jdbc.url}" />
+        <property name="user" value="${jdbc.user}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+
+
+    <!-- 注册Dao -->
+    <!--<bean id="accountDao" class="com.zhongyp.transaction.AccountDaoImpl">-->
+        <!--<property name="dataSource" ref="myDataSource"/>-->
+    <!--</bean>-->
+    <!--<bean id="stockDao" class="com.zhongyp.transaction.StockDaoImpl">-->
+        <!--<property name="dataSource" ref="myDataSource"/>-->
+    <!--</bean>-->
+    <!--&lt;!&ndash; 注册Service &ndash;&gt;-->
+    <!--<bean id="stockService" class="com.zhongyp.transaction.StockProcessServiceImpl">-->
+        <!--<property name="accountDao" ref="accountDao"/>-->
+        <!--<property name="stockDao" ref="stockDao"/>-->
+    <!--</bean>-->
+
+    <!-- 事务 -->
+    <!-- 注册事务管理器 -->
+    <bean id="myTxManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="myDataSource"/>
+    </bean>
+
+
+    <!-- 注册事务通知 -->
+    <tx:advice id="txAdvice" transaction-manager="myTxManager">
+        <tx:attributes>
+            <tx:method name="*" isolation="DEFAULT" propagation="REQUIRED"/>
+            <!-- 指定在连接点方法上应用的事务属性 -->
+            <!--<tx:method name="open*" isolation="DEFAULT" propagation="REQUIRED"/>-->
+            <!--<tx:method name="buyStock" isolation="DEFAULT" propagation="REQUIRED" rollback-for="StockException"/>-->
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- AOP配置 -->
+    <aop:config>
+        <!-- 指定切入点 -->
+        <aop:pointcut expression="execution(* com.zhongyp.redis.RedisUtils.*(..))" id="methodpoint"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="methodpoint"/>
+    </aop:config>
 </beans>

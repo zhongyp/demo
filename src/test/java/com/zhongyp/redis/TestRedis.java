@@ -13,6 +13,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.data.redis.support.collections.DefaultRedisList;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,12 +32,20 @@ public class TestRedis {
     @Qualifier("testRedisTemplate")
     RedisTemplate redisTemplate;
 
+
+    @Autowired
+    RedisUtils redisUtils;
+
+
     @Test
     public void testSetAndGet(){
         redisTemplate.opsForValue().set("abctest","testabc");
         System.out.println(redisTemplate.opsForValue().get("abctest"));
     }
 
+    /**
+     * 测试序列化后的对象是否可以强制类型转换
+     */
     @Test
     public void testHash(){
         HashMap map = new HashMap<>();
@@ -55,6 +64,12 @@ public class TestRedis {
 
     }
 
+    /**
+     * 测试redis pipline
+     * pipline是管道的意思
+     * pipline可以支持一次执行多个命令，只获取一次connection，用于执行批量任务时，提高系统性能
+     * 并不支持spring管理事务，如果需要事务管理，可以在回调方法中自己写事务控制
+     */
     @Test
     public void testPipline(){
         System.out.println(redisTemplate.executePipelined(new RedisCallback <Object>() {
@@ -72,62 +87,11 @@ public class TestRedis {
         }));
     }
 
+    /**
+     * 测试RedisTemplate的事务
+     */
     @Test
-    public void pipeline(){
-        List<Object> results = redisTemplate.executePipelined(new RedisCallback<Object>() {
-            public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                connection.multi();
-                for(int i=0; i< 10; i++) {
-                    connection.listCommands().lPush("testlist".getBytes(), ("abc" + i).getBytes());
-                }
-                connection.exec();
-                return null;
-            }
-        });
-        results.stream().forEach(System.out::println);
-    }
-
-    @Test
-    public void testExecutePiplinedTransaction(){
-        redisTemplate.executePipelined(new SessionCallback<Object>() {
-            public List<Object> execute(RedisOperations operations) throws DataAccessException {
-                operations.multi();
-                operations.opsForSet().add("key", "value1");
-                // This will contain the results of all ops in the transaction
-                return operations.exec();
-            }
-
-        });
-    }
-    @Test
-    public void testExecuteTransaction(){
-        redisTemplate.execute(new SessionCallback<Object>() {
-            public List<Object> execute(RedisOperations operations) throws DataAccessException {
-                operations.multi();
-                operations.opsForList().leftPush("123a".getBytes(), "abc".getBytes());
-                operations.opsForList().leftPush("1234b".getBytes(), "abc3".getBytes());
-                int b = 1/0;
-                operations.opsForList().leftPush("1235c".getBytes(), "abc4".getBytes());
-                operations.opsForList().leftPush("1236d".getBytes(), "abc5".getBytes());
-                return operations.exec();
-            }
-
-        });
-    }
-    @Test
-    public void testExecuteTransactionWithRedisCallback(){
-        redisTemplate.execute(new RedisCallback <Object>() {
-            @Override
-            public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
-                redisConnection.multi();
-                redisConnection.listCommands().lPush("123a".getBytes(), "abc".getBytes());
-                redisConnection.listCommands().lPush("1234b".getBytes(), "abc3".getBytes());
-                int b = 1/0;
-                redisConnection.listCommands().lPush("1235c".getBytes(), "abc4".getBytes());
-                redisConnection.listCommands().lPush("1236d".getBytes(), "abc5".getBytes());
-                redisConnection.exec();
-                return null;
-            }
-        });
+    public void testRedisTransaction(){
+        redisUtils.testExecuteTransactionWithRedisCallback();
     }
 }

@@ -1,17 +1,41 @@
 package com.zhongyp.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  * @author zhongyp.
  * @date 2019/6/28
  */
 public class RedisUtils {
-    @Autowired
-    RedisTemplate redisTemplate;
 
-    public void test(){
+    private RedisTemplate redisTemplate;
 
+    public void setRedisTemplate(RedisTemplate redisTemplate){
+        this.redisTemplate = redisTemplate;
+    }
+
+
+    /**
+     * 用于测试redisTemplate.execute的事务管理
+     */
+    public void testExecuteTransactionWithRedisCallback(){
+        redisTemplate.execute(new RedisCallback<Object>() {
+            @Override
+            public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
+                redisConnection.listCommands().lPush("123a".getBytes(), "abc".getBytes());
+                redisConnection.listCommands().lPush("1234b".getBytes(), "abc3".getBytes());
+//                int b = 1/0;
+                redisConnection.listCommands().lPush("1235c".getBytes(), "abc4".getBytes());
+                redisConnection.listCommands().lPush("1236d".getBytes(), "abc5".getBytes());
+                return null;
+            }
+        });
+        throw new RuntimeException();
     }
 }
