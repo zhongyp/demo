@@ -21,6 +21,7 @@
         <property name="hostName" value="${redis.host}"/>
         <property name="port" value="${redis.port}"/>
         <property name="password" value="${redis.pass}"/>
+        <property name="database" value="0"/>
     </bean>
 
     <bean id="genericJackson2JsonRedisSerializer"
