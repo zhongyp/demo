@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -134,9 +135,11 @@ public class TestRedis {
 
     @Test
     public void testNullValue(){
-        redisTemplate.opsForValue().set("hello", "null");
-        redisTemplate.delete("hello");
-        System.out.println(isNull((String) redisTemplate.opsForValue().get("hello")));
+//        redisTemplate.opsForValue().set("hello", null);
+        redisTemplate.opsForHash().put("a", "b", "null");
+//        redisTemplate.delete("a");
+        System.out.println(redisTemplate.opsForHash().scan("a", ScanOptions.scanOptions().match("a").build()));
+//        System.out.println(isNull((String) redisTemplate.opsForValue().get("hello")));
     }
 
     public static boolean isNull(String str) {
@@ -152,15 +155,141 @@ public class TestRedis {
             }
         });
 
-        redisTemplate.executePipelined(new SessionCallback<Object>() {
+        redisTemplate.executePipelined(new SessionCallback<String>() {
 
             @Override
-            public <K, V> Object execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
+            public <K, V> String execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
 //                redisOperation
+                ValueOperations operations = redisOperations.opsForValue();
+                operations.set("a", "b");
+
                 return null;
             }
         });
     }
 
+    @Test
+    public void testBoundValueOps(){
+//        Role role = new Role();
+//        role.setId(10);
+//        role.setRoleName("CEO");
+//        SessionCallback sessionCallback = new SessionCallback<Role>() {
+//            @Override
+//            public Role execute(RedisOperations redisOperations) throws DataAccessException {
+//                redisOperations.boundValueOps("role_1").set(role);
+//                return (Role) redisOperations.boundValueOps("role_1").get();
+//            }
+//        };
+//        Role role1 = (Role) redisTemplate.execute(sessionCallback);
+//        System.out.println(role1.getRoleName());
 
+         SessionCallback sessionCallback = new SessionCallback() {
+             @Override
+             public Object execute(RedisOperations redisOperations) throws DataAccessException {
+                 BoundValueOperations operations = redisOperations.boundValueOps("abc");
+                 operations.set("abcd");
+                 operations.append("ok");
+                 operations.getAndSet("a");
+                 operations.append("vc");
+                 return operations.get();
+             }
+         };
+        Object object = redisTemplate.executePipelined(sessionCallback);
+        System.out.println(object);
+        System.out.println(((List) object).get(2));
+        Map<String, String> map = new HashMap<>();
+
+    }
+
+    @Test
+    public void testJson(){
+        Map map = new HashMap();
+        map.put("a", "b");
+        List list = new ArrayList();
+        list.add(map);
+        redisTemplate.opsForHash().put("a", "b", list);
+        Object object = redisTemplate.opsForHash().get("a", "b");
+        System.out.println(object);
+    }
+
+    @Test
+    public void hashKey(){
+        System.out.println(redisTemplate.hasKey("*8201*"));
+    }
+
+    @Test
+    public void testPiplinedData(){
+        List list = new ArrayList();
+        redisTemplate.executePipelined(new SessionCallback<Object>() {
+            @Override
+            public <K, V> Object execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
+                ValueOperations valueOperations = redisOperations.opsForValue();
+                valueOperations.set("1", "2");
+                valueOperations.set("2", "2");
+                valueOperations.set("3", "2");
+                for(int i=1;i<4;i++){
+                    list.add(valueOperations.get(String.valueOf(i)));
+                }
+                return null;
+            }
+        });
+        System.out.println(list);
+    }
+    @Test
+    public void testFuzzyQuery(){
+        SetOperations setOperations = redisTemplate.opsForSet();
+        Cursor cursor = setOperations.scan("2019:371600:pay:allkeyset", ScanOptions.scanOptions().match("*2019:3*:*").build());
+        while (cursor.hasNext()){
+            System.out.println(cursor.next());
+        }
+    }
+
+    @Test
+    public void testSaveObject(){
+        Role role = new Role();
+        role.setId(1);
+        role.setRoleName("abc");
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+        valueOperations.set("role", role);
+        System.out.println(valueOperations.get("role"));
+    }
+
+    @Test
+    public void testObject(){
+        HashMap hashMap = new HashMap();
+        hashMap.put("test", "test");
+
+        redisTemplate.executePipelined(new SessionCallback<Object>() {
+
+            @Override
+            public <K, V> Object execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
+                ValueOperations operations = redisOperations.opsForValue();
+                operations.set("test", hashMap);
+                return null;
+            }
+        });
+    }
+
+}
+
+class Role implements Serializable {
+    int id;
+
+    String roleName;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 }

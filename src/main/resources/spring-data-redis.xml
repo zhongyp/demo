@@ -26,10 +26,14 @@
 
     <bean id="genericJackson2JsonRedisSerializer"
           class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+    <bean id="stringSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
     <bean id="testRedisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
         <property name="enableTransactionSupport" value="true"/>
         <property name="connectionFactory" ref="jedisConnectionFactory"/>
+        <property name="valueSerializer" ref="genericJackson2JsonRedisSerializer"></property>
         <property name="hashValueSerializer" ref="genericJackson2JsonRedisSerializer"></property>
+        <property name="hashKeySerializer" ref="stringSerializer"/>
+        <property name="keySerializer" ref="stringSerializer"/>
     </bean>
 
 
