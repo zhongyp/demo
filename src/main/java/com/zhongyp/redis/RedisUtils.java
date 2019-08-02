@@ -25,11 +25,11 @@ public class RedisUtils {
         redisTemplate.execute(new RedisCallback<Object>() {
             @Override
             public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
-                redisConnection.listCommands().lPush("123a".getBytes(), "abc".getBytes());
-                redisConnection.listCommands().lPush("1234b".getBytes(), "abc3".getBytes());
-//                int b = 1/0;
-                redisConnection.listCommands().lPush("1235c".getBytes(), "abc4".getBytes());
-                redisConnection.listCommands().lPush("1236d".getBytes(), "abc5".getBytes());
+//                redisConnection.listCommands().lPush("123a".getBytes(), "abc".getBytes());
+//                redisConnection.listCommands().lPush("1234b".getBytes(), "abc3".getBytes());
+////                int b = 1/0;
+//                redisConnection.listCommands().lPush("1235c".getBytes(), "abc4".getBytes());
+//                redisConnection.listCommands().lPush("1236d".getBytes(), "abc5".getBytes());
                 return null;
             }
         });

@@ -72,12 +72,12 @@ public class TestRedis {
             redisTemplate.executePipelined(new RedisCallback<Object>() {
                 @Override
                 public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
-//                redisConnection.multi();
-                    redisConnection.listCommands().lPush("123a".getBytes(), "abc".getBytes());
-                    redisConnection.listCommands().lPush("1234b".getBytes(), "abc3".getBytes());
-//                int b = 1/0;
-                    redisConnection.listCommands().lPush("1235c".getBytes(), "abc4".getBytes());
-                    redisConnection.listCommands().lPush("1236d".getBytes(), "abc5".getBytes());
+////                redisConnection.multi();
+//                    redisConnection.listCommands().lPush("123a".getBytes(), "abc".getBytes());
+//                    redisConnection.listCommands().lPush("1234b".getBytes(), "abc3".getBytes());
+////                int b = 1/0;
+//                    redisConnection.listCommands().lPush("1235c".getBytes(), "abc4".getBytes());
+//                    redisConnection.listCommands().lPush("1236d".getBytes(), "abc5".getBytes());
 //                redisConnection.exec();
                     return null;
                 }
@@ -217,6 +217,9 @@ public class TestRedis {
         System.out.println(redisTemplate.hasKey("*8201*"));
     }
 
+    /**
+     * 测试pipline是否可以单条返回值
+     */
     @Test
     public void testPiplinedData(){
         List list = new ArrayList();
@@ -233,17 +236,41 @@ public class TestRedis {
                 return null;
             }
         });
-        System.out.println(list);
+        System.out.println(list.size());
     }
+
+    /**
+     * 测试模糊查询，测试连接到底需要需要手动关闭，结果还是需要的手动关闭的
+     */
     @Test
     public void testFuzzyQuery(){
-        SetOperations setOperations = redisTemplate.opsForSet();
-        Cursor cursor = setOperations.scan("2019:371600:pay:allkeyset", ScanOptions.scanOptions().match("*2019:3*:*").build());
-        while (cursor.hasNext()){
-            System.out.println(cursor.next());
+
+//        SetOperations setOperations = redisTemplate.opsForSet();
+//        Cursor cursor = setOperations.scan("2019:87:pay:allkeyset", ScanOptions.scanOptions().count(100).match("*2019:8*:*").build());
+//        int i=0;
+//        while (cursor.hasNext()){
+//            System.out.println(i++);
+//            System.out.println(cursor.next());
+//        }
+
+
+        RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
+        Cursor redisCursor = connection.scan(ScanOptions.scanOptions().count(100).match("*2019:8*:*").build());
+        int i=0;
+        while (redisCursor.hasNext()){
+            System.out.println(i++);
+            System.out.println(redisCursor.next());
+        }
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
+    /**
+     * 用来测试Redis的valueOperations存储实例
+     */
     @Test
     public void testSaveObject(){
         Role role = new Role();
@@ -254,6 +281,9 @@ public class TestRedis {
         System.out.println(valueOperations.get("role"));
     }
 
+    /**
+     * 用来测试不同序列化方式的valueOperations放入Object对象时的不同处理方式
+     */
     @Test
     public void testObject(){
         HashMap hashMap = new HashMap();
