@@ -48,6 +48,18 @@
 					<artifactId>slf4j-api</artifactId>
 					<groupId>org.slf4j</groupId>
 				</exclusion>
+				<exclusion>
+					<groupId>javax.jms</groupId>
+					<artifactId>jms</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jdmk</groupId>
+					<artifactId>jmxtools</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jmx</groupId>
+					<artifactId>jmxri</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
@@ -177,6 +189,18 @@
 			<version>1.18.6</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.sun.jdmk/jmxtools -->
+		<dependency>
+			<groupId>com.sun.jdmk</groupId>
+			<artifactId>jmxtools</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.sun.jmx/jmxri -->
+		<dependency>
+			<groupId>com.sun.jmx</groupId>
+			<artifactId>jmxri</artifactId>
+			<version>1.2.1</version>
+		</dependency>
 
 
 	</dependencies>
@@ -193,4 +217,11 @@
             </plugin>
         </plugins>
     </build>
+
+	<repositories>
+		<repository>
+			<id>jboss</id>
+			<url>http://repository.jboss.org/maven2/</url>
+		</repository>
+	</repositories>
 </project>
