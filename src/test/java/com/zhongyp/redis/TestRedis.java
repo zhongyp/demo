@@ -66,19 +66,19 @@ public class TestRedis {
      * 并不支持spring管理事务，如果需要事务管理，可以在回调方法中自己写事务控制
      */
     @Test
-    public void testPipline(){
+    public void testPiplineWithRedisConnection(){
         long start = System.currentTimeMillis();
-        for(int i=0;i<100000;i++) {
+        for(int i=0;i<10;i++) {
             redisTemplate.executePipelined(new RedisCallback<Object>() {
                 @Override
                 public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
-////                redisConnection.multi();
-//                    redisConnection.listCommands().lPush("123a".getBytes(), "abc".getBytes());
-//                    redisConnection.listCommands().lPush("1234b".getBytes(), "abc3".getBytes());
-////                int b = 1/0;
-//                    redisConnection.listCommands().lPush("1235c".getBytes(), "abc4".getBytes());
-//                    redisConnection.listCommands().lPush("1236d".getBytes(), "abc5".getBytes());
-//                redisConnection.exec();
+                redisConnection.multi();
+                    redisConnection.listCommands().lPush("123a".getBytes(), "abc".getBytes());
+                    redisConnection.listCommands().lPush("1234b".getBytes(), "abc3".getBytes());
+//                int b = 1/0;
+                    redisConnection.listCommands().lPush("1235c".getBytes(), "abc4".getBytes());
+                    redisConnection.listCommands().lPush("1236d".getBytes(), "abc5".getBytes());
+                redisConnection.exec();
                     return null;
                 }
             });
@@ -94,7 +94,9 @@ public class TestRedis {
     public void testRedisTransaction(){
         long start = System.currentTimeMillis();
         for(int i=0;i<100000;i++){
-            redisUtils.testExecuteTransactionWithRedisCallback();
+//            redisUtils.testExecuteTransactionWithRedisCallback();
+//            redisUtils.testExecutePipelineTransactionWithRedisCallback();
+            redisUtils.testExecutePipelineWithConnection();
             System.out.println(i);
         }
         System.out.println(System.currentTimeMillis()-start);
@@ -222,21 +224,80 @@ public class TestRedis {
      */
     @Test
     public void testPiplinedData(){
+
+
         List list = new ArrayList();
-        redisTemplate.executePipelined(new SessionCallback<Object>() {
+        List list1 = redisTemplate.executePipelined(new SessionCallback<Object>() {
             @Override
             public <K, V> Object execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
+                redisOperations.multi();
                 ValueOperations valueOperations = redisOperations.opsForValue();
                 valueOperations.set("1", "2");
                 valueOperations.set("2", "2");
                 valueOperations.set("3", "2");
+                valueOperations.get("87*");
                 for(int i=1;i<4;i++){
                     list.add(valueOperations.get(String.valueOf(i)));
                 }
+                redisOperations.exec();
                 return null;
             }
         });
-        System.out.println(list.size());
+
+        for(Object object:list1){
+            System.out.println(object);
+        }
+    }
+
+
+    /**
+     * 测试pipline是否可以单条返回值
+     */
+    @Test
+    public void testExecute(){
+
+
+        List list = new ArrayList();
+//        List list1 = redisTemplate.executePipelined(new SessionCallback<Object>() {
+//            @Override
+//            public <K, V> Object execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
+//                redisOperations.multi();
+//                ValueOperations valueOperations = redisOperations.opsForValue();
+//                valueOperations.set("1", "2");
+//                valueOperations.set("2", "2");
+//                valueOperations.set("3", "2");
+//                valueOperations.get("87*");
+//                for(int i=1;i<4;i++){
+//                    list.add(valueOperations.get(String.valueOf(i)));
+//                }
+//                redisOperations.exec();
+//                return null;
+//            }
+//        });
+
+
+//        for(Object object:list1){
+//            System.out.println(object);
+//        }
+
+        redisTemplate.execute(new SessionCallback() {
+            @Override
+            public Object execute(RedisOperations redisOperations) throws DataAccessException {
+                redisOperations.multi();
+                ValueOperations valueOperations = redisOperations.opsForValue();
+                valueOperations.set("1", "2");
+                valueOperations.set("2", "2");
+                valueOperations.set("3", "2");
+                int b = 1/0;
+                valueOperations.get("87*");
+                for(int i=1;i<4;i++){
+                    list.add(valueOperations.get(String.valueOf(i)));
+                }
+                redisOperations.exec();
+                return null;
+            }
+
+        });
     }
 
     /**

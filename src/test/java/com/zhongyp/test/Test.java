@@ -1,6 +1,8 @@
 package com.zhongyp.test;
 
-import java.util.HashMap;
+import com.zhongyp.jvm.ClassStructureDemo;
+
+import java.util.Comparator;
 
 /**
  * @author zhongyp.
@@ -23,9 +25,50 @@ public class Test {
 //        System.out.println(test.b);
 //        Arrays.asList();
 //    }
+
+//    public static void get(int i){
+//        List list =  new ArrayList();
+//
+//    }
+//
+//    public static void get(Integer i){
+//        List list =  new ArrayList();
+//
+//    }
+
+//    String a = "b";
+//
+//    int b = 1;
+//
+//    Integer c = 2;
+
+//    String a = new String("abc");
+//    String b = new String("abc");
+//    String c = "abc";
+//    String d = new String("abc");
+
     public static void main(String[] args) {
 
-        new HashMap();
+        ClassStructureDemo classStructureDemo = new ClassStructureDemo();
+//        String str1 = new StringBuilder("计算机").append("软件").toString();
+//        System.out.println(str1.intern() == str1);
+//
+//        String str2 = new StringBuilder("ja").append("va").toString();
+//        System.out.println(str2.intern() == str2);
+//        Test test = new Test();
+//        test.a.intern();
+//        System.out.println(test.a==test.b);
+//        System.out.println(test.a==test.c);
+//        test.d.intern();
+//        System.out.println(test.a==test.d);
+//        JavaBean javaBean = new JavaBean();
+//        Integer i = new Integer(3);
+//        get(i);
+//        get(3);
+
+//        ReentrantLock reentrantLock;
+//
+//        new HashMap();
 
 //        List<String> list = new ArrayList<>(10);
 //        System.out.println(list.size());
@@ -96,9 +139,15 @@ public class Test {
 //        System.out.println(sql.toString());
     }
 }
-//class MyComparator implements Comparator<String>{
-//    @Override
-//    public int compare(String o1, String o2) {
-//        return o1.compareTo(o2);
-//    }
-//}
+class MyComparator implements Comparator<String> {
+    @Override
+    public int compare(String o1, String o2) {
+        return o1.compareTo(o2);
+    }
+}
+class A{
+    public void test(){}
+}
+class B extends A{
+    public void test(){}
+}
