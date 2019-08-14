@@ -13,12 +13,10 @@ public class A {
         System.out.println("display in A");
     }
 
-    public static void main(String[] args) {
-        A a = new B();
-        System.out.println(((B) a).name);
-        a.show();
-        a.display();
+    public void testAccess(){
+        System.out.println("进A了");
     }
+
 }
 
 class B extends A{
@@ -29,4 +27,17 @@ class B extends A{
     void display(){
         System.out.println("display in B");
     }
+    public void testAccess(){
+        System.out.println("进B了");
+    }
 }
+/**
+ A
+ B
+ show in A
+ show in B
+ display in B
+ show in B
+ show in B
+ */
+

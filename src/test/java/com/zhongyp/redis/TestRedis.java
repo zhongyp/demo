@@ -361,6 +361,13 @@ public class TestRedis {
         });
     }
 
+    @Test
+    public void testStoreChinese(){
+        HashOperations hashOperations = redisTemplate.opsForHash();
+        hashOperations.put("abc", "a", "我是中国人!");
+        System.out.println(hashOperations.get("abc", "a"));
+    }
+
 }
 
 class Role implements Serializable {

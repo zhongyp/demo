@@ -1,7 +1,6 @@
-package com.zhongyp.advanced.atomic;
+package com.zhongyp.atomic;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author zhongyp.

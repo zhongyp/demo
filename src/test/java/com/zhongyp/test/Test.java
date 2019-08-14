@@ -1,7 +1,5 @@
 package com.zhongyp.test;
 
-import com.zhongyp.jvm.ClassStructureDemo;
-
 import java.util.Comparator;
 
 /**
@@ -49,7 +47,14 @@ public class Test {
 
     public static void main(String[] args) {
 
-        ClassStructureDemo classStructureDemo = new ClassStructureDemo();
+        Object obj = "something";
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 1000000000; i++) {
+            String a = (String)obj;
+        }
+        System.out.println(System.currentTimeMillis()-start);
+
+//        ClassStructureDemo classStructureDemo = new ClassStructureDemo();
 //        String str1 = new StringBuilder("计算机").append("软件").toString();
 //        System.out.println(str1.intern() == str1);
 //
