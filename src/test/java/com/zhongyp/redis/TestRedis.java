@@ -40,6 +40,8 @@ public class TestRedis {
 
     /**
      * 测试序列化后的对象是否可以强制类型转换
+     *
+     * 结论：如果存入的value是个对象，则redis中存储的是对象的序列化
      */
     @Test
     public void testHash(){
@@ -63,7 +65,6 @@ public class TestRedis {
      * 测试redis pipline
      * pipline是管道的意思
      * pipline可以支持一次执行多个命令，只获取一次connection，用于执行批量任务时，提高系统性能
-     * 并不支持spring管理事务，如果需要事务管理，可以在回调方法中自己写事务控制
      */
     @Test
     public void testPiplineWithRedisConnection(){
@@ -72,13 +73,11 @@ public class TestRedis {
             redisTemplate.executePipelined(new RedisCallback<Object>() {
                 @Override
                 public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
-                redisConnection.multi();
                     redisConnection.listCommands().lPush("123a".getBytes(), "abc".getBytes());
                     redisConnection.listCommands().lPush("1234b".getBytes(), "abc3".getBytes());
-//                int b = 1/0;
                     redisConnection.listCommands().lPush("1235c".getBytes(), "abc4".getBytes());
                     redisConnection.listCommands().lPush("1236d".getBytes(), "abc5".getBytes());
-                redisConnection.exec();
+                    redisConnection.listCommands().lPush("1236e".getBytes(), "abc5".getBytes());
                     return null;
                 }
             });
@@ -88,42 +87,26 @@ public class TestRedis {
     }
 
     /**
-     * 测试RedisTemplate的事务
+     * 测试RedisTemplate execute和executePipelined对事务管理器的支持
      */
     @Test
     public void testRedisTransaction(){
         long start = System.currentTimeMillis();
         for(int i=0;i<100000;i++){
+            // execute()方法事务支持
 //            redisUtils.testExecuteTransactionWithRedisCallback();
+            // executePipelined方法事务支持
 //            redisUtils.testExecutePipelineTransactionWithRedisCallback();
+            // executePipelined方法事务支持
             redisUtils.testExecutePipelineWithConnection();
             System.out.println(i);
         }
         System.out.println(System.currentTimeMillis()-start);
     }
 
-
-    @Test
-    public void testSessionCallback(){
-        long start = System.currentTimeMillis();
-
-        for(int i=0;i<100000;i++) {
-            redisTemplate.execute(new SessionCallback() {
-                @Override
-                public Object execute(RedisOperations redisOperations) throws DataAccessException {
-                    redisOperations.opsForList().leftPush("123a".getBytes(), "abc".getBytes());
-                    redisOperations.opsForList().leftPush("1234b".getBytes(), "abc3".getBytes());
-//                int b = 1/0;
-                    redisOperations.opsForList().leftPush("1235c".getBytes(), "abc4".getBytes());
-                    redisOperations.opsForList().leftPush("1236d".getBytes(), "abc5".getBytes());
-                    return null;
-                }
-            });
-        }
-        System.out.println(System.currentTimeMillis()-start);
-
-    }
-
+    /**
+     * 测试RedisTemplate 游标
+     */
     @Test
     public void testRedisTemplateScan(){
 
@@ -135,41 +118,26 @@ public class TestRedis {
         }
     }
 
+    /**
+     * 测试key不存在和value为null的返回值是否相同
+     */
     @Test
     public void testNullValue(){
-//        redisTemplate.opsForValue().set("hello", null);
+        redisTemplate.opsForValue().set("hello", null);
         redisTemplate.opsForHash().put("a", "b", "null");
-//        redisTemplate.delete("a");
-        System.out.println(redisTemplate.opsForHash().scan("a", ScanOptions.scanOptions().match("a").build()));
-//        System.out.println(isNull((String) redisTemplate.opsForValue().get("hello")));
+        redisTemplate.delete("a");
+        System.out.println(isNull((String) redisTemplate.opsForValue().get("hello")));
+        System.out.println(isNull((String) redisTemplate.opsForValue().get("a")));
+
     }
 
     public static boolean isNull(String str) {
         return str == null;
     }
 
-    @Test
-    public void testDiffBetweenExecuteAndExecutePiplined(){
-        redisTemplate.execute(new SessionCallback() {
-            @Override
-            public Object execute(RedisOperations redisOperations) throws DataAccessException {
-                return null;
-            }
-        });
-
-        redisTemplate.executePipelined(new SessionCallback<String>() {
-
-            @Override
-            public <K, V> String execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
-//                redisOperation
-                ValueOperations operations = redisOperations.opsForValue();
-                operations.set("a", "b");
-
-                return null;
-            }
-        });
-    }
-
+    /**
+     * 测试key绑定operations
+     */
     @Test
     public void testBoundValueOps(){
 //        Role role = new Role();
@@ -203,6 +171,9 @@ public class TestRedis {
 
     }
 
+    /**
+     * 测试json序列化方式对list和map的转换
+     */
     @Test
     public void testJson(){
         Map map = new HashMap();
@@ -211,6 +182,18 @@ public class TestRedis {
         list.add(map);
         redisTemplate.opsForHash().put("a", "b", list);
         Object object = redisTemplate.opsForHash().get("a", "b");
+        /**
+         * [
+         * 	"java.util.ArrayList",
+         * 	[
+         *                {
+         * 			"@class": "java.util.HashMap",
+         * 			"a": "b"
+         *        }
+         * 	]
+         * ]
+         */
+        //虽然输出是[{a=b}]，但是存储的是如上述注释的样子
         System.out.println(object);
     }
 
@@ -221,32 +204,47 @@ public class TestRedis {
 
     /**
      * 测试pipline是否可以单条返回值
+     *
+     * 测试结果：
+     *
+     * execute可以有单条返回值
+     * executePipelined返回值为null
+     *
      */
     @Test
     public void testPiplinedData(){
 
 
         List list = new ArrayList();
-        List list1 = redisTemplate.executePipelined(new SessionCallback<Object>() {
+        // 先将100000key插入进去
+       redisTemplate.executePipelined(new SessionCallback<Object>() {
             @Override
             public <K, V> Object execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
                 redisOperations.multi();
                 ValueOperations valueOperations = redisOperations.opsForValue();
-                valueOperations.set("1", "2");
-                valueOperations.set("2", "2");
-                valueOperations.set("3", "2");
-                valueOperations.get("87*");
-                for(int i=1;i<4;i++){
-                    list.add(valueOperations.get(String.valueOf(i)));
+                for(int i=0;i<100000;i++){
+                    valueOperations.set("a" + i, i);
                 }
                 redisOperations.exec();
                 return null;
             }
         });
-
-        for(Object object:list1){
-            System.out.println(object);
+       // 使用execute和executePipelined分别测试，executePipeline获取值为null
+        redisTemplate.execute(new SessionCallback<Object>() {
+            @Override
+            public <K, V> Object execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
+                ValueOperations valueOperations = redisOperations.opsForValue();
+                for(int i=0;i<100000;i++){
+                    list.add(valueOperations.get("a" + i));
+                }
+                return null;
+            }
+        });
+        for(Object obj:list){
+            System.out.println(obj);
         }
+
+
     }
 
 
