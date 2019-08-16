@@ -13,7 +13,7 @@ public class StockDaoImpl extends JdbcDaoSupport implements IStockDao {
 
     @Override
     public void insertStock(String sname, int amount) {
-        String sql = "insert into stock(sname, count) values (?,?)";
+        String sql = "insert into account(name, money) values (?,?)";
         this.getJdbcTemplate().update(sql , sname, amount);
     }
 

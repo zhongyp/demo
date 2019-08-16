@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author zhongyp.
@@ -320,11 +321,7 @@ public class TestRedis {
             System.out.println(i++);
             System.out.println(redisCursor.next());
         }
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
     }
 
     /**
@@ -364,6 +361,31 @@ public class TestRedis {
         HashOperations hashOperations = redisTemplate.opsForHash();
         hashOperations.put("abc", "a", "我是中国人!");
         System.out.println(hashOperations.get("abc", "a"));
+    }
+
+
+    @Test
+    public void testExpireKeys(){
+        redisTemplate.executePipelined(new SessionCallback<Object>() {
+            @Override
+            public <K, V> Object execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
+
+                for(int i=0; i<10000;i++){
+                    ValueOperations valueOperations = redisOperations.opsForValue();
+                    valueOperations.set("a" + i, i, 10);
+                    redisTemplate.expire("a" + i, 10, TimeUnit.SECONDS);
+                }
+                return null;
+            }
+        });
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println();
+
     }
 
 }

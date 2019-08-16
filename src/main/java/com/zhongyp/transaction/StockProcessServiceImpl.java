@@ -1,5 +1,8 @@
 package com.zhongyp.transaction;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+
 /**
  * project: demo
  * author: zhongyp
@@ -11,6 +14,8 @@ public class StockProcessServiceImpl implements IStockProcessService{
     private IAccountDao accountDao;
     private IStockDao stockDao;
 
+    @Autowired
+    RedisTemplate redisTemplate;
     public void setAccountDao(IAccountDao accountDao) {
         this.accountDao = accountDao;
     }
@@ -38,6 +43,14 @@ public class StockProcessServiceImpl implements IStockProcessService{
             throw new StockException("购买股票异常");
         }
         stockDao.updateStock(sname, amount, isBuy);
+    }
+
+    @Override
+    public void testBuy(){
+        System.out.println("I am abc");
+        stockDao.insertStock("abc", 40);
+        System.exit(0);
+        redisTemplate.opsForValue().set("abc", 40);
     }
 
 }
