@@ -38,6 +38,6 @@ public class ConcurrencyTest {
             b--;
         }
         long time = System.currentTimeMillis() - start;
-        System.out.println("serial:" + time + "ms, b=" + b + ",a = " + a);
+        System.out.println("serial:" + time + "ms, b=" + b + ",java.lang.a = " + a);
     }
 }

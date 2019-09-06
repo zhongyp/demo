@@ -2,11 +2,7 @@ package com.zhongyp.concurrency.thread;
 
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Test {
@@ -39,9 +35,9 @@ public class Test {
 //        Thread thread = new Thread(new Runnable() {
 //            @Override
 //            public void run() {
-//                int a = 0;
-//                a++;
-//                System.out.println(a);
+//                int java.lang.a = 0;
+//                java.lang.a++;
+//                System.out.println(java.lang.a);
 //                System.out.println(Thread.currentThread().isInterrupted());
 //            }
 //        });

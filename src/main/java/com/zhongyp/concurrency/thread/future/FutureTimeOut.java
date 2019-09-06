@@ -35,7 +35,7 @@ class ThreadTask implements Callable{
 
     @Override
     public Object call() throws Exception {
-//        int a = 5/0;
+//        int java.lang.a = 5/0;
 //        Thread.interrupted();
         System.out.println("提前结束了么？");
         Thread.sleep(5000);

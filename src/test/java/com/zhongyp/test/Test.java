@@ -1,5 +1,7 @@
 package com.zhongyp.test;
 
+import com.zhongyp.advanced.classloading.InitClass;
+
 import java.util.Comparator;
 
 /**
@@ -8,17 +10,17 @@ import java.util.Comparator;
  */
 public class Test {
 
-//    static int a = 1;
+//    static int java.lang.a = 1;
 //    int b = 2;
 //
 //    public Test (){
-//        System.out.println("构造" + a + b);
+//        System.out.println("构造" + java.lang.a + b);
 //    }
 //    {
-//        System.out.println("普通方法块" + a + b);
+//        System.out.println("普通方法块" + java.lang.a + b);
 //    }
 //    static {
-//        System.out.println("静态方法块" + a);
+//        System.out.println("静态方法块" + java.lang.a);
 //        Test test = new Test();
 //        System.out.println(test.b);
 //        Arrays.asList();
@@ -34,25 +36,77 @@ public class Test {
 //
 //    }
 
-//    String a = "b";
+//    String java.lang.a = "b";
 //
 //    int b = 1;
 //
 //    Integer c = 2;
 
-//    String a = new String("abc");
+//    String java.lang.a = new String("abc");
 //    String b = new String("abc");
 //    String c = "abc";
 //    String d = new String("abc");
 
     public static void main(String[] args) {
 
-        Object obj = "something";
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < 1000000000; i++) {
-            String a = (String)obj;
-        }
-        System.out.println(System.currentTimeMillis()-start);
+
+        new Thread(){
+            @Override
+            public void run() {
+                InitClass initClass = new InitClass();
+            }
+
+        }.start();
+        new Thread(){
+            @Override
+            public void run() {
+                InitClass initClass = new InitClass();
+            }
+        }.start();
+//        try {
+//            throw new RuntimeException("呵呵");
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            System.out.println(String.valueOf(e.getStackTrace()));
+//        }
+//        // 字符串
+//        String str = "str";
+//
+//        System.out.println(str);
+//
+//        // 基本类型
+//        int i = 1;
+//
+//        // 基本类型数组
+//        int[] arrayI = new int[3];
+//
+//        // 引用类型数组
+//        A [] arrayA = new A[3];
+//
+//        // 引用类型
+//        A a = new A();
+//
+//        // 引用方法
+//        a.test();
+//
+//        // 接口声明
+//        C c = new B();
+//
+//        // 接口方法
+//        c.test();
+//
+//        // lambda
+//        Runnable x = ()->{};
+//        A a = new A();
+//        B b = (B) a;
+
+//        Object obj = "something";
+//        long start = System.currentTimeMillis();
+//        for (int i = 0; i < 1000000000; i++) {
+//            String a = (String)obj;
+//        }
+//        System.out.println(System.currentTimeMillis()-start);
 
 //        ClassStructureDemo classStructureDemo = new ClassStructureDemo();
 //        String str1 = new StringBuilder("计算机").append("软件").toString();
@@ -61,11 +115,11 @@ public class Test {
 //        String str2 = new StringBuilder("ja").append("va").toString();
 //        System.out.println(str2.intern() == str2);
 //        Test test = new Test();
-//        test.a.intern();
-//        System.out.println(test.a==test.b);
-//        System.out.println(test.a==test.c);
+//        test.java.lang.a.intern();
+//        System.out.println(test.java.lang.a==test.b);
+//        System.out.println(test.java.lang.a==test.c);
 //        test.d.intern();
-//        System.out.println(test.a==test.d);
+//        System.out.println(test.java.lang.a==test.d);
 //        JavaBean javaBean = new JavaBean();
 //        Integer i = new Integer(3);
 //        get(i);
@@ -120,22 +174,22 @@ public class Test {
 
 //        StringBuffer sql = new StringBuffer();
 //        sql.append(" select distinct d.chr_code1 vtcode, d.chr_name addr, c.chr_code stamp ");
-//        sql.append("   from epay_conf_addr_action a, ");
+//        sql.append("   from epay_conf_addr_action java.lang.a, ");
 //        sql.append("      epay_conf_addr_stamp    b, ");
 //        sql.append("      epay_stamp              c, ");
 //        sql.append("      epay_billtypeaddr       d  ");
-//        sql.append("  where a.action_id = ? ");
+//        sql.append("  where java.lang.a.action_id = ? ");
 //        sql.append("   and d.chr_code1 = ? ");
-//        sql.append("   and a.addr_id = b.addr_id ");
+//        sql.append("   and java.lang.a.addr_id = b.addr_id ");
 //        sql.append("   and b.stamp_id = c.chr_id ");
-//        sql.append("   and a.addr_id = d.chr_id ");
-//        sql.append("   and a.rg_code = b.rg_code " +
-//                "   and a.rg_code = c.rg_code " +
-//                "   and a.rg_code = d.rg_code  " +
-//                "   and a.set_year = b.set_year " +
-//                "   and a.set_year = c.set_year " +
-//                "   and a.set_year = d.set_year ");
-//        sql.append(" and a.rg_code = ? and a.set_year = ? ");
+//        sql.append("   and java.lang.a.addr_id = d.chr_id ");
+//        sql.append("   and java.lang.a.rg_code = b.rg_code " +
+//                "   and java.lang.a.rg_code = c.rg_code " +
+//                "   and java.lang.a.rg_code = d.rg_code  " +
+//                "   and java.lang.a.set_year = b.set_year " +
+//                "   and java.lang.a.set_year = c.set_year " +
+//                "   and java.lang.a.set_year = d.set_year ");
+//        sql.append(" and java.lang.a.rg_code = ? and java.lang.a.set_year = ? ");
 //        sql.append("    and exists (select 1 from epay_conf_stamp_user e ");
 //        sql.append("         where c.chr_id = e.stamp_id and e.user_id = ? and e.rg_code = ? and e.set_year = ? ) ");
 //        sql.append("    and exists (select 1 from epay_conf_sn_stamp f,epay_sn g  ");
@@ -151,8 +205,14 @@ class MyComparator implements Comparator<String> {
     }
 }
 class A{
+    String d = "abc";
     public void test(){}
 }
-class B extends A{
+class B implements C{
+    @Override
     public void test(){}
+}
+
+interface C{
+    void test();
 }

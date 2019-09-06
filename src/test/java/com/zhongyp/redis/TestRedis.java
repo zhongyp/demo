@@ -49,7 +49,7 @@ public class TestRedis {
         HashMap map = new HashMap<>();
         List list = new ArrayList<>();
         list.add("aa");
-        map.put("a","b");
+        map.put("java/lang/a","b");
         map.put("c","b");
         map.put("b","b");
         map.put("d","b");
@@ -125,10 +125,10 @@ public class TestRedis {
     @Test
     public void testNullValue(){
         redisTemplate.opsForValue().set("hello", null);
-        redisTemplate.opsForHash().put("a", "b", "null");
-        redisTemplate.delete("a");
+        redisTemplate.opsForHash().put("java/lang/a", "b", "null");
+        redisTemplate.delete("java/lang/a");
         System.out.println(isNull((String) redisTemplate.opsForValue().get("hello")));
-        System.out.println(isNull((String) redisTemplate.opsForValue().get("a")));
+        System.out.println(isNull((String) redisTemplate.opsForValue().get("java/lang/a")));
 
     }
 
@@ -160,7 +160,7 @@ public class TestRedis {
                  BoundValueOperations operations = redisOperations.boundValueOps("abc");
                  operations.set("abcd");
                  operations.append("ok");
-                 operations.getAndSet("a");
+                 operations.getAndSet("java/lang/a");
                  operations.append("vc");
                  return operations.get();
              }
@@ -178,23 +178,23 @@ public class TestRedis {
     @Test
     public void testJson(){
         Map map = new HashMap();
-        map.put("a", "b");
+        map.put("java/lang/a", "b");
         List list = new ArrayList();
         list.add(map);
-        redisTemplate.opsForHash().put("a", "b", list);
-        Object object = redisTemplate.opsForHash().get("a", "b");
+        redisTemplate.opsForHash().put("java/lang/a", "b", list);
+        Object object = redisTemplate.opsForHash().get("java/lang/a", "b");
         /**
          * [
          * 	"java.util.ArrayList",
          * 	[
          *                {
          * 			"@class": "java.util.HashMap",
-         * 			"a": "b"
+         * 			"java.lang.a": "b"
          *        }
          * 	]
          * ]
          */
-        //虽然输出是[{a=b}]，但是存储的是如上述注释的样子
+        //虽然输出是[{java.lang.a=b}]，但是存储的是如上述注释的样子
         System.out.println(object);
     }
 
@@ -224,7 +224,7 @@ public class TestRedis {
                 redisOperations.multi();
                 ValueOperations valueOperations = redisOperations.opsForValue();
                 for(int i=0;i<100000;i++){
-                    valueOperations.set("a" + i, i);
+                    valueOperations.set("java/lang/a" + i, i);
                 }
                 redisOperations.exec();
                 return null;
@@ -236,7 +236,7 @@ public class TestRedis {
             public <K, V> Object execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
                 ValueOperations valueOperations = redisOperations.opsForValue();
                 for(int i=0;i<100000;i++){
-                    list.add(valueOperations.get("a" + i));
+                    list.add(valueOperations.get("java/lang/a" + i));
                 }
                 return null;
             }
@@ -359,8 +359,8 @@ public class TestRedis {
     @Test
     public void testStoreChinese(){
         HashOperations hashOperations = redisTemplate.opsForHash();
-        hashOperations.put("abc", "a", "我是中国人!");
-        System.out.println(hashOperations.get("abc", "a"));
+        hashOperations.put("abc", "java/lang/a", "我是中国人!");
+        System.out.println(hashOperations.get("abc", "java/lang/a"));
     }
 
 
@@ -372,8 +372,8 @@ public class TestRedis {
 
                 for(int i=0; i<10000;i++){
                     ValueOperations valueOperations = redisOperations.opsForValue();
-                    valueOperations.set("a" + i, i, 10);
-                    redisTemplate.expire("a" + i, 10, TimeUnit.SECONDS);
+                    valueOperations.set("java/lang/a" + i, i, 10);
+                    redisTemplate.expire("java/lang/a" + i, 10, TimeUnit.SECONDS);
                 }
                 return null;
             }
@@ -385,6 +385,23 @@ public class TestRedis {
         }
 
         System.out.println();
+
+    }
+
+    @Test
+    public void testPipelinedException(){
+        redisTemplate.executePipelined(new SessionCallback<Object>() {
+            @Override
+            public <K, V> Object execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
+                redisOperations.multi();
+                ValueOperations valueOperations = redisOperations.opsForValue();
+                valueOperations.set("abcd", "abcd");
+//                int i = 1/0;
+                redisOperations.exec();
+                return null;
+            }
+        });
+        System.out.println(redisTemplate.delete("abc"));
 
     }
 

@@ -5,7 +5,7 @@ package com.zhongyp.basics.serializable;
  * @date 2019/5/23
  */
 public class Parent {
-    private String a = "a";
+    private String a = "java/lang/a";
     private String b;
     public String c = "c";
 

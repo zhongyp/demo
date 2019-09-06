@@ -12,8 +12,8 @@ public class B {
         this.a = a;
     }
 
-//    public void setA(A a) {
-//        this.a = a;
+//    public void setA(A java.lang.a) {
+//        this.java.lang.a = java.lang.a;
 //    }
 
     public void test(){

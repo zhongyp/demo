@@ -26,7 +26,6 @@ public class TestTransaction {
      */
     @Test
     public void testSpringTransactionFunc(){
-
         iStockProcessService.testBuy();
     }
 

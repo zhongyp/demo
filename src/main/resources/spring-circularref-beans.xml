@@ -8,7 +8,7 @@
         <!--<property name="b" ref="b"></property>-->
     </bean>
     <bean id="b" class="com.zhongyp.spring.demo.init.circularref.B">
-        <!--<property name="a" ref="a"></property>-->
+        <!--<property name="java.lang.a" ref="java.lang.a"></property>-->
         <constructor-arg ref="a" />
     </bean>
 

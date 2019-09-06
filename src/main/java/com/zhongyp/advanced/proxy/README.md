@@ -1,7 +1,7 @@
 ## Java 动态代理
 
 ### InvocationHandler
-this is the interface implemented by the invocation handler of a proxy.
+this is the interface implemented by the invocation handler of java.lang.a proxy.
 译：这是一个代理处理程序的实现接口
 
 ### newProxyInstance(ClassLoader loader, Class<?> interface, InvocationHandler h)

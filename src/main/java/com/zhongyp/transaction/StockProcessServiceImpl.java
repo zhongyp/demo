@@ -48,9 +48,15 @@ public class StockProcessServiceImpl implements IStockProcessService{
     @Override
     public void testBuy(){
         System.out.println("I am abc");
-        stockDao.insertStock("abc", 40);
-        System.exit(0);
-        redisTemplate.opsForValue().set("abc", 40);
+        long start = System.currentTimeMillis();
+        stockDao.insertStock("abc", 74);
+        System.exit(3);
+//        PathDasher pathDasher = new PathDasher(null);
+        System.out.println("完蛋鸟");
+        redisTemplate.opsForValue().set("abc", 72);
+        System.out.println(System.currentTimeMillis() - start);
+
+        redisTemplate.opsForValue().set("abc", "abcdefg");
     }
 
 }
