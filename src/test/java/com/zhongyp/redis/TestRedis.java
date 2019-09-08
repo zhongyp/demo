@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author zhongyp.
@@ -93,15 +92,15 @@ public class TestRedis {
     @Test
     public void testRedisTransaction(){
         long start = System.currentTimeMillis();
-        for(int i=0;i<100000;i++){
+//        for(int i=0;i<100000;i++){
             // execute()方法事务支持
-//            redisUtils.testExecuteTransactionWithRedisCallback();
+            redisUtils.testExecuteTransactionWithRedisCallback();
             // executePipelined方法事务支持
 //            redisUtils.testExecutePipelineTransactionWithRedisCallback();
             // executePipelined方法事务支持
-            redisUtils.testExecutePipelineWithConnection();
-            System.out.println(i);
-        }
+//            redisUtils.testExecutePipelineWithConnection();
+//            System.out.println(i);
+//        }
         System.out.println(System.currentTimeMillis()-start);
     }
 
@@ -366,25 +365,36 @@ public class TestRedis {
 
     @Test
     public void testExpireKeys(){
-        redisTemplate.executePipelined(new SessionCallback<Object>() {
-            @Override
-            public <K, V> Object execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
+//        redisTemplate.executePipelined(new SessionCallback<Object>() {
+//            @Override
+//            public <K, V> Object execute(RedisOperations<K, V> redisOperations) throws DataAccessException {
+//
+//                for(int i=0; i<10000;i++){
+//                    ValueOperations valueOperations = redisOperations.opsForValue();
+//                    valueOperations.set("java/lang/a" + i, i, 10);
+//                    redisTemplate.expire("java/lang/a" + i, 10, TimeUnit.SECONDS);
+//                }
+//                return null;
+//            }
+//        });
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
-                for(int i=0; i<10000;i++){
-                    ValueOperations valueOperations = redisOperations.opsForValue();
-                    valueOperations.set("java/lang/a" + i, i, 10);
-                    redisTemplate.expire("java/lang/a" + i, 10, TimeUnit.SECONDS);
-                }
+        String key = "abcdefg";
+        String value = "value-123456";
+        redisTemplate.execute(new RedisCallback() {
+            @Override
+            public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
+                redisConnection.set(key.getBytes(), value.getBytes());
+
+                redisConnection.expire(key.getBytes(), 3);
                 return null;
             }
         });
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        System.out.println();
 
     }
 

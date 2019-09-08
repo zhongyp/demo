@@ -6,6 +6,9 @@ package com.zhongyp.advanced.classloading;
  */
 public class InitClass {
 
+    /**
+     * static 仅会初始化一次，即使在多个线程同时创建多个实例的情况下
+     */
     static{
         try {
             System.out.println("开始喽!");
