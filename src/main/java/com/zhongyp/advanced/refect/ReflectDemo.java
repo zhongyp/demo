@@ -1,6 +1,6 @@
 package com.zhongyp.advanced.refect;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 
 
 /**
@@ -12,6 +12,8 @@ public class ReflectDemo {
         //加载Class对象
         Class<?> clazz =  Class.forName("com.zhongyp.advanced.refect.User");
         Method mtd = clazz.getMethod("setName", String.class);
+        Object reflectDemo = new ReflectDemo();
+
         //实例化Class对象
         Object obj = (Object)clazz.newInstance();
         mtd.invoke(obj,"camda");
