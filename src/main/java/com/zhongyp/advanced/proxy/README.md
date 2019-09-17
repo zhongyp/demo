@@ -2,8 +2,6 @@
 
 ### InvocationHandler
 
-
-
 this is the interface implemented by the invocation handler of java.lang.a proxy.
 译：这是一个代理处理程序的实现接口
 

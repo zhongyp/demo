@@ -59,17 +59,6 @@ public class Main {
 }
 
 
-interface TestService{
-
-    void test();
-    void test3();
-}
-
-interface TestService1{
-
-    void test1();
-    void test4();
-}
 
 class TestServiceImpl implements TestService{
     @Override
