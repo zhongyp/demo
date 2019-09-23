@@ -1,4 +1,4 @@
-package com.zhongyp.advanced.refect.cglib;
+package com.zhongyp.advanced.proxy.cglib;
 
 import org.springframework.cglib.proxy.Enhancer;
 
@@ -16,6 +16,7 @@ public class Test {
 
         // 创建代理类
         Dao dao = (Dao)enhancer.create();
+
         dao.update();
         dao.select();
     }

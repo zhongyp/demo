@@ -1,4 +1,4 @@
-package com.zhongyp.advanced.refect.cglib;
+package com.zhongyp.advanced.proxy.cglib;
 
 /**
  * @author zhongyp.

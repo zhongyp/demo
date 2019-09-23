@@ -1,4 +1,4 @@
-package com.zhongyp.advanced.refect.cglib;
+package com.zhongyp.advanced.proxy.cglib;
 
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
